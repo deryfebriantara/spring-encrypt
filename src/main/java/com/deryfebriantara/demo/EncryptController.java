@@ -39,7 +39,7 @@ public class EncryptController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public String encrypt(@PathVariable String data) throws Exception {
-        String salt = "1234567890";
+        String salt = "012345678901234567890";
 
         RSAUtil rSAUtil = new RSAUtil();
       String path =    new File(".").getCanonicalPath();
