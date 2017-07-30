@@ -3,10 +3,7 @@ package com.deryfebriantara.demo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.crypto.NoSuchPaddingException;
 import java.io.File;
@@ -36,9 +33,9 @@ public class EncryptController {
     @RequestMapping(
             value = "/api/encrypt/{data}",
             method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE
+            produces = { "application/json" }
     )
-    public String encrypt(@PathVariable String data) throws Exception {
+    public @ResponseBody String encrypt(@PathVariable String data) throws Exception {
         String salt = "012345678901234567890";
 
         RSAUtil rSAUtil = new RSAUtil();
@@ -53,11 +50,16 @@ public class EncryptController {
             rsaEncLength = "0" + rsaEncLength;
         }
 
+        String rsa =  new String(rsaEnc);
+
+
+
         try {
-            return  "{\"AES\":" +
+            return   "[{\"AES\":" +
                     " \""+AESTools.encrypt(data, keySalt(salt))+"\" ," +
                     "\"rsaEncLength\": \""+ rsaEncLength+"\" ," +
-                    "\"RSA\" : \""+rsaEnc.toString()+"\"} ";
+                    "\"RSA\" : \""+rsa+"\"}]";
+
         } catch (Exception e) {
             e.printStackTrace();
         }
